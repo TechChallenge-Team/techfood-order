@@ -7,16 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using TechFood.Application;
-using TechFood.Application.Categories.Queries;
 using TechFood.Application.Common.Services.Interfaces;
-using TechFood.Application.Customers.Queries;
-using TechFood.Application.Menu.Queries;
 using TechFood.Application.Orders.Queries;
-using TechFood.Application.Preparations.Queries;
-using TechFood.Application.Products.Queries;
+using TechFood.Domain.Common.Interfaces;
 using TechFood.Domain.Enums;
 using TechFood.Domain.Repositories;
-using TechFood.Domain.Common.Interfaces;
 using TechFood.Domain.UoW;
 using TechFood.Infra.Payments.MercadoPago;
 using TechFood.Infra.Persistence.Contexts;
@@ -57,11 +52,6 @@ public static class DependencyInjection
         services.AddScoped<IPreparationRepository, PreparationRepository>();
 
         //Queries
-        services.AddScoped<IProductQueryProvider, ProductQueryProvider>();
-        services.AddScoped<ICategoryQueryProvider, CategoryQueryProvider>();
-        services.AddScoped<ICustomerQueryProvider, CustomerQueryProvider>();
-        services.AddScoped<IPreparationQueryProvider, PreparationQueryProvider>();
-        services.AddScoped<IMenuQueryProvider, MenuQueryProvider>();
         services.AddScoped<IOrderQueryProvider, OrderQueryProvider>();
 
         services.AddScoped<IImageStorageService, LocalDiskImageStorageService>();

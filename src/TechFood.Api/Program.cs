@@ -54,12 +54,6 @@ var app = builder.Build();
 
     app.UseHealthChecks("/health");
 
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        RequestPath = app.Configuration["TechFoodStaticImagesUrl"],
-        FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "images")),
-    });
-
     app.UseRouting();
 
     app.UseCors();

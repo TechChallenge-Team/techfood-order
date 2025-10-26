@@ -47,12 +47,14 @@ public class CreateOrderCommandHandler(
             order.Number,
             order.Amount,
             order.CreatedAt,
+            //deve criar o customer dto?
             customer != null ? new CustomerDto(customer.Id, customer.Name.FullName) : null,
             order.Status,
             items.ConvertAll(item =>
                 new OrderItemDto(
                     item.orderItem.Id,
                     item.product.Name,
+                    // tem necessidade de ter a imagem aqui?
                     imageUrlResolver.BuildFilePath(nameof(Product).ToLower(), item.product.ImageFileName),
                     item.product.Price,
                     item.orderItem.Quantity
