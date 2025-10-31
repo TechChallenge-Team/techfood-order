@@ -8,9 +8,9 @@ using TechFood.Infra.Persistence.Contexts;
 
 namespace TechFood.Infra.Persistence.Repositories
 {
-    internal class CustomerRepository(TechFoodContext dbContext) : ICustomerRepository
+    internal class CustomerRepository(OrderContext dbContext) : ICustomerRepository
     {
-        private readonly TechFoodContext _dbContext = dbContext;
+        private readonly OrderContext _dbContext = dbContext;
 
         public async Task<Guid> CreateAsync(Customer customer)
         {

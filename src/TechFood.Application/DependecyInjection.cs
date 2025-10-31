@@ -9,8 +9,6 @@ public static class DependecyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         //Services
-        services.AddTransient<IEmailSender, EmailSender>();
-
         services.AddSingleton<IOrderNumberService, OrderNumberService>();
         services.AddTransient<IImageUrlResolver, ImageUrlResolver>();
 

@@ -1,71 +1,27 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TechFood.Domain.Common.Entities;
 using TechFood.Domain.Entities;
 using TechFood.Domain.Enums;
-using TechFood.Domain.Common.Entities;
-using TechFood.Domain.Common.Interfaces;
-using TechFood.Domain.UoW;
+using TechFood.Shared.Infra.Persistence.Contexts;
 
 namespace TechFood.Infra.Persistence.Contexts;
 
-public class TechFoodContext(DbContextOptions<TechFoodContext> options) : DbContext(options), IUnitOfWork, IDomainEventStore
+public class OrderContext : TechFoodContext
 {
-    public DbSet<Category> Categories { get; set; } = null!;
-
     public DbSet<Customer> Customers { get; set; } = null!;
 
     public DbSet<Order> Orders { get; set; } = null!;
 
     public DbSet<Product> Products { get; set; } = null!;
 
-    public DbSet<Payment> Payments { get; set; } = null!;
-
-    public DbSet<User> Users { get; set; } = null!;
-
-    public DbSet<Preparation> Preparations { get; set; } = null!;
-
-    public Task<IEnumerable<IDomainEvent>> GetDomainEventsAsync()
-    {
-        // get hold of all the domain events
-        var domainEvents = ChangeTracker.Entries<Entity>()
-            .Select(entry => entry.Entity.PopEvents())
-            .SelectMany(events => events);
-
-        return Task.FromResult(domainEvents);
-    }
-
-    public async Task<bool> CommitAsync()
-    {
-        var success = await SaveChangesAsync() > 0;
-        return success;
-    }
-
-    public Task RollbackAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        foreach (var entry in ChangeTracker
-            .Entries<Entity>()
-            .Where(e => e.State == EntityState.Deleted))
-        {
-            entry.State = EntityState.Modified;
-            entry.Entity.IsDeleted = true;
-        }
-
-        return await base.SaveChangesAsync(cancellationToken);
-    }
+    public OrderContext(DbContextOptions<OrderContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(TechFoodContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderContext).Assembly);
 
         var properties = modelBuilder.Model
             .GetEntityTypes()

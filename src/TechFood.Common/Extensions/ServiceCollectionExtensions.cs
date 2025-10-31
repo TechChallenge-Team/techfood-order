@@ -31,7 +31,6 @@ public static class ServiceCollectionExtensions
             {
                 jsonOptions.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 jsonOptions.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(new UpperCaseNamingPolicy()));
-                //jsonOptions.JsonSerializerOptions.Converters.Add(new JsonTimeSpanConverter());
             });
 
         services.AddCors();

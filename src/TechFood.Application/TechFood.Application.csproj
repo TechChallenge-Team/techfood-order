@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+    <PackageReference Include="TechFood.Shared.Application" Version="0.1.5-test" />
   </ItemGroup>
 
 	<ItemGroup>

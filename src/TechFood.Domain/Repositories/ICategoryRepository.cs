@@ -1,5 +1,5 @@
 using TechFood.Domain.Entities;
-using TechFood.Domain.Common.Interfaces;
+using TechFood.Shared.Domain.Repository;
 
 namespace TechFood.Domain.Repositories;
 

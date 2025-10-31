@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using TechFood.Domain.Entities;
-using TechFood.Domain.Enums;
+using TechFood.Shared.Domain.Enums;
 
 namespace TechFood.Domain.Repositories;
 

@@ -1,20 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using TechFood.Application;
-using TechFood.Common.Extensions;
 using TechFood.Infra;
 using TechFood.Infra.Persistence.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddPresentation(builder.Configuration, new PresentationOptions
-    {
-        AddSwagger = true,
-        AddJwtAuthentication = true,
-        SwaggerTitle = "TechFood API V1",
-        SwaggerDescription = "TechFood API V1"
-    });
-
     builder.Services.AddApplication();
     builder.Services.AddInfra();
 }
@@ -24,7 +14,7 @@ var app = builder.Build();
     //Run migrations
     using (var scope = app.Services.CreateScope())
     {
-        var dataContext = scope.ServiceProvider.GetRequiredService<TechFoodContext>();
+        var dataContext = scope.ServiceProvider.GetRequiredService<OrderContext>();
         dataContext.Database.Migrate();
     }
 
@@ -49,6 +39,10 @@ var app = builder.Build();
 
         app.UseSwaggerUI();
     }
+
+    app.MapControllers();
+
+    app.Run();
 
     app.UseInfra();
 

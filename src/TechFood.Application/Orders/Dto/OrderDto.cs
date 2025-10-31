@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TechFood.Domain.Enums;
+using TechFood.Shared.Domain.Enums;
 
 namespace TechFood.Application.Orders.Dto;
 

@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="TechFood.Shared.Domain" Version="0.1.5-test" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,16 +7,14 @@ using Microsoft.Extensions.Options;
 using TechFood.Application;
 using TechFood.Application.Common.Services.Interfaces;
 using TechFood.Application.Orders.Queries;
-using TechFood.Domain.Common.Interfaces;
 using TechFood.Domain.Enums;
 using TechFood.Domain.Repositories;
-using TechFood.Domain.UoW;
 using TechFood.Infra.Payments.MercadoPago;
 using TechFood.Infra.Persistence.Contexts;
 using TechFood.Infra.Persistence.ImageStorage;
 using TechFood.Infra.Persistence.Queries;
 using TechFood.Infra.Persistence.Repositories;
-using TechFood.Infra.Persistence.UoW;
+using TechFood.Shared.Infra.Extensions;
 
 namespace TechFood.Infra;
 
@@ -26,21 +22,31 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfra(this IServiceCollection services)
     {
-        //Context
-        services.AddScoped<TechFoodContext>();
-        services.AddDbContext<TechFoodContext>((serviceProvider, options) =>
+        services.AddSharedInfra<OrderContext>(new InfraOptions
         {
-            var config = serviceProvider.GetRequiredService<IConfiguration>();
-
-            options.UseSqlServer(config.GetConnectionString("DataBaseConection"));
+            DbContext = (serviceProvider, dbOptions) =>
+            {
+                var config = serviceProvider.GetRequiredService<IConfiguration>();
+                dbOptions.UseSqlServer(config.GetConnectionString("DataBaseConection"));
+            },
+            AssemblyLoad = typeof(DependecyInjection).Assembly
         });
 
-        //UoW
-        services.AddScoped<IUnitOfWorkTransaction, UnitOfWorkTransaction>();
-        services.AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<TechFoodContext>());
+        //Context
+        //services.AddScoped<TechFoodContext>();
+        //services.AddDbContext<TechFoodContext>((serviceProvider, options) =>
+        //{
+        //    var config = serviceProvider.GetRequiredService<IConfiguration>();
 
-        //DomainEvents
-        services.AddScoped<IDomainEventStore>(serviceProvider => serviceProvider.GetRequiredService<TechFoodContext>());
+        //    options.UseSqlServer(config.GetConnectionString("DataBaseConection"));
+        //});
+
+        ////UoW
+        //services.AddScoped<IUnitOfWorkTransaction, UnitOfWorkTransaction>();
+        //services.AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<TechFoodContext>());
+
+        ////DomainEvents
+        //services.AddScoped<IDomainEventStore>(serviceProvider => serviceProvider.GetRequiredService<TechFoodContext>());
 
         //Data
         services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -74,18 +80,18 @@ public static class DependencyInjection
             client.DefaultRequestHeaders.Authorization = new("Bearer", serviceProvider.GetRequiredService<IOptions<MercadoPagoOptions>>().Value.AccessToken);
         });
 
-        //MediatR
-        services.AddMediatR(typeof(DependecyInjection));
+        ////MediatR
+        //services.AddMediatR(typeof(DependecyInjection));
 
-        var mediatR = services.First(s => s.ServiceType == typeof(IMediator));
+        //var mediatR = services.First(s => s.ServiceType == typeof(IMediator));
 
-        services.Replace(ServiceDescriptor.Transient<IMediator, EventualConsistency.Mediator>());
-        services.Add(
-            new ServiceDescriptor(
-                mediatR.ServiceType,
-                EventualConsistency.Mediator.ServiceKey,
-                mediatR.ImplementationType!,
-                mediatR.Lifetime));
+        //services.Replace(ServiceDescriptor.Transient<IMediator, EventualConsistency.Mediator>());
+        //services.Add(
+        //    new ServiceDescriptor(
+        //        mediatR.ServiceType,
+        //        EventualConsistency.Mediator.ServiceKey,
+        //        mediatR.ImplementationType!,
+        //        mediatR.Lifetime));
 
         return services;
     }
