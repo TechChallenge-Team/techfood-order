@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TechFood.Order.Application.Orders.Dto;
-using TechFood.Order.Application.Orders.Queries;
+using TechFood.Order.Application.Dto;
+using TechFood.Order.Application.Queries;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Shared.Domain.Enums;
 

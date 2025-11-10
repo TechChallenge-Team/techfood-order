@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TechFood.Order.Application;
-using TechFood.Order.Application.Orders.Queries;
+using TechFood.Order.Application.Queries;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Order.Infra.Persistence.Queries;

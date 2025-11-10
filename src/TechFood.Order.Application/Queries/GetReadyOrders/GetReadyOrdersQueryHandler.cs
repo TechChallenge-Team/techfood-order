@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using TechFood.Order.Application.Orders.Dto;
+using TechFood.Order.Application.Dto;
+using TechFood.Order.Application.Queries;
 
-namespace TechFood.Order.Application.Orders.Queries.GetReadyOrders;
+namespace TechFood.Order.Application.Queries.GetReadyOrders;
 
 public class GetReadyOrdersQueryHandler(IOrderQueryProvider queries) : IRequestHandler<GetReadyOrdersQuery, List<OrderDto>>
 {

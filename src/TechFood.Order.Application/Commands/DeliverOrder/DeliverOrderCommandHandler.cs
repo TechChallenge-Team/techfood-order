@@ -4,7 +4,7 @@ using MediatR;
 using TechFood.Order.Application.Common.Resources;
 using TechFood.Order.Domain.Repositories;
 
-namespace TechFood.Order.Application.Orders.Commands.DeliverOrder;
+namespace TechFood.Order.Application.Commands.DeliverOrder;
 
 public class DeliverOrderCommandHandler(IOrderRepository repo)
     : IRequestHandler<DeliverOrderCommand, Unit>

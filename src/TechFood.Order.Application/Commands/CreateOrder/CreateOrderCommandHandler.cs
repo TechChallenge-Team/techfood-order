@@ -3,11 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TechFood.Order.Application.Common.Services.Interfaces;
-using TechFood.Order.Application.Orders.Dto;
+using TechFood.Order.Application.Dto;
 using TechFood.Order.Domain.Entities;
 using TechFood.Order.Domain.Repositories;
 
-namespace TechFood.Order.Application.Orders.Commands.CreateOrder;
+namespace TechFood.Order.Application.Commands.CreateOrder;
 
 public class CreateOrderCommandHandler(
     IOrderRepository orderRepo,

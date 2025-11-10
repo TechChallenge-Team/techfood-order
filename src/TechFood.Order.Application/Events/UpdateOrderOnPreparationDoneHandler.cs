@@ -6,20 +6,21 @@ using TechFood.Order.Application.Common.Resources;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Shared.Application.Events;
 
-namespace TechFood.Order.Application.Orders.Events;
+namespace TechFood.Order.Application.Events;
 
-public record PreparationStartedEvent(Guid OrderId) : IIntegrationEvent;
+public record PreparationDoneEvent(Guid OrderId) : IIntegrationEvent;
 
-internal class UpdateOrderOnPreparationStartHandler(IOrderRepository repo) : INotificationHandler<PreparationStartedEvent>
+internal class UpdateOrderOnPreparationDoneHandler(IOrderRepository repo) : INotificationHandler<PreparationDoneEvent>
 {
-    public async Task Handle(PreparationStartedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(PreparationDoneEvent notification, CancellationToken cancellationToken)
     {
         var order = await repo.GetByIdAsync(notification.OrderId);
+
         if (order == null)
         {
             throw new Shared.Application.Exceptions.ApplicationException(Exceptions.Order_OrderNotFound);
         }
 
-        order.Prepare();
+        order.Ready();
     }
 }

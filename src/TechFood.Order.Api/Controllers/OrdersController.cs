@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TechFood.Order.Application.Orders.Commands.CreateOrder;
-using TechFood.Order.Application.Orders.Commands.DeliverOrder;
-using TechFood.Order.Application.Orders.Queries.GetOrders;
-using TechFood.Order.Application.Orders.Queries.GetReadyOrders;
+using TechFood.Order.Application.Commands.CreateOrder;
+using TechFood.Order.Application.Commands.DeliverOrder;
+using TechFood.Order.Application.Queries.GetOrders;
+using TechFood.Order.Application.Queries.GetReadyOrders;
 using TechFood.Order.Contracts.Orders;
 
 namespace TechFood.Order.Api.Controllers;

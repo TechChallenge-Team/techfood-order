@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using TechFood.Shared.Domain.Enums;
 
-namespace TechFood.Order.Application.Orders.Dto;
+namespace TechFood.Order.Application.Dto;
 
 public record OrderDto(
     Guid Id,

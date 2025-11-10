@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using MediatR;
-using TechFood.Order.Application.Orders.Dto;
+using TechFood.Order.Application.Dto;
 
-namespace TechFood.Order.Application.Orders.Queries.GetOrders;
+namespace TechFood.Order.Application.Queries.GetOrders;
 
 public record GetOrdersQuery : IRequest<List<OrderDto>>;
