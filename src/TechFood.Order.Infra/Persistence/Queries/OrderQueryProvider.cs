@@ -13,7 +13,7 @@ internal class OrderQueryProvider(OrderContext techFoodContext) : IOrderQueryPro
 {
     public async Task<List<OrderDto>> GetOrdersAsync()
     {
-        var products = await techFoodContext.Products.ToListAsync();
+        //var products = await techFoodContext.Products.ToListAsync();
 
         var result = await techFoodContext.Orders
             .AsNoTracking()
@@ -31,19 +31,21 @@ internal class OrderQueryProvider(OrderContext techFoodContext) : IOrderQueryPro
                 data.Status,
                 [.. data.Items.Select(item =>
                 {
-                    var product = products.FirstOrDefault(p => p.Id == item.ProductId);
+                    //var product = products.FirstOrDefault(p => p.Id == item.ProductId);
 
                     return new OrderItemDto(
                         item.Id,
-                        product!.Name,
-                        product.ImageUrl,
+                        null!,
+                        null!,
+                         //product!.Name,
+                         //product.ImageUrl,
                         item.UnitPrice, item.Quantity);
                 })]))];
     }
 
     public async Task<List<OrderDto>> GetReadyOrdersAsync()
     {
-        var products = await techFoodContext.Products.ToListAsync();
+        //var products = await techFoodContext.Products.ToListAsync();
 
         var result = await techFoodContext.Orders
             .AsNoTracking()
@@ -62,12 +64,14 @@ internal class OrderQueryProvider(OrderContext techFoodContext) : IOrderQueryPro
                  data.Status,
                  [.. data.Items.Select(item =>
                  {
-                     var product = products.FirstOrDefault(p => p.Id == item.ProductId);
+                     //var product = products.FirstOrDefault(p => p.Id == item.ProductId);
 
                      return new OrderItemDto(
                          item.Id,
-                         product!.Name,
-                         product.ImageUrl,
+                         null!,
+                         null!,
+                         //product!.Name,
+                         //product.ImageUrl,
                          item.UnitPrice, item.Quantity);
                  })]))];
     }

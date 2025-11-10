@@ -11,50 +11,51 @@ namespace TechFood.Order.Application.Orders.Commands.CreateOrder;
 
 public class CreateOrderCommandHandler(
     IOrderRepository orderRepo,
-    IProductRepository productRepo,
+    //IProductRepository productRepo,
     IOrderNumberService orderNumberService
         ) : IRequestHandler<CreateOrderCommand, OrderDto>
 {
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var products = await productRepo.GetAllAsync();
+        throw new System.NotImplementedException();
+        //var products = await productRepo.GetAllAsync();
 
-        var number = await orderNumberService.GetAsync();
-        var order = new Domain.Entities.Order(number, request.CustomerId);
+        //var number = await orderNumberService.GetAsync();
+        //var order = new Domain.Entities.Order(number, request.CustomerId);
 
-        var items = request.Items
-            .Select(item =>
-            {
-                var product = products.First(p => p!.Id == item.ProductId)!;
-                var orderItem = new OrderItem(product.Id, product.Price, item.Quantity);
+        //var items = request.Items
+        //    .Select(item =>
+        //    {
+        //        var product = products.First(p => p!.Id == item.ProductId)!;
+        //        var orderItem = new OrderItem(product.Id, product.Price, item.Quantity);
 
-                return (product, orderItem);
-            })
-            .ToList();
+        //        return (product, orderItem);
+        //    })
+        //    .ToList();
 
-        foreach (var (_, item) in items)
-        {
-            order.AddItem(item);
-        }
+        //foreach (var (_, item) in items)
+        //{
+        //    order.AddItem(item);
+        //}
 
-        await orderRepo.AddAsync(order);
+        //await orderRepo.AddAsync(order);
 
-        return new OrderDto(
-            order.Id,
-            order.Number,
-            order.Amount,
-            order.CreatedAt,
-            //deve criar o customer dto?
-            request.CustomerId,
-            order.Status,
-            items.ConvertAll(item =>
-                new OrderItemDto(
-                    item.orderItem.Id,
-                    item.product.Name,
-                    item.product.ImageUrl,
-                    item.product.Price,
-                    item.orderItem.Quantity
-                )
-            ));
+        //return new OrderDto(
+        //    order.Id,
+        //    order.Number,
+        //    order.Amount,
+        //    order.CreatedAt,
+        //    //deve criar o customer dto?
+        //    request.CustomerId,
+        //    order.Status,
+        //    items.ConvertAll(item =>
+        //        new OrderItemDto(
+        //            item.orderItem.Id,
+        //            item.product.Name,
+        //            item.product.ImageUrl,
+        //            item.product.Price,
+        //            item.orderItem.Quantity
+        //        )
+        //    ));
     }
 }

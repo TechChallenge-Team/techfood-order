@@ -11,8 +11,6 @@ public class OrderContext : TechFoodContext
 {
     public DbSet<Domain.Entities.Order> Orders { get; set; } = null!;
 
-    public DbSet<Product> Products { get; set; } = null!;
-
     public OrderContext(DbContextOptions<OrderContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
