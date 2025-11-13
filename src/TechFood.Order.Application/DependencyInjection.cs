@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace TechFood.Order.Application;
 
-public static class DependecyInjection
+public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {

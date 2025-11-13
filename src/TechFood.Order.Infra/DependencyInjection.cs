@@ -24,7 +24,7 @@ public static class DependencyInjection
                 var config = serviceProvider.GetRequiredService<IConfiguration>();
                 dbOptions.UseSqlServer(config.GetConnectionString("DataBaseConection"));
             },
-            ApplicationAssembly = typeof(DependecyInjection).Assembly
+            ApplicationAssembly = typeof(Application.DependencyInjection).Assembly
         });
 
         //Data
