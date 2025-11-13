@@ -3,23 +3,23 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using TechFood.Order.Application.Common.Services.Interfaces;
 using TechFood.Order.Application.Dto;
+using TechFood.Order.Application.Services.Interfaces;
 
 namespace TechFood.Order.Infra.Services;
 
-public class ProductService : IProductService
+public class BackofficeService : IBackofficeService
 {
     private readonly HttpClient _httpClient;
 
-    public ProductService(HttpClient httpClient)
+    public BackofficeService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
     public async Task<IEnumerable<ProductDto>> GetProductsAsync(CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"/v1/products", cancellationToken);
+        var response = await _httpClient.GetAsync("/v1/products", cancellationToken);
 
         response.EnsureSuccessStatusCode();
 

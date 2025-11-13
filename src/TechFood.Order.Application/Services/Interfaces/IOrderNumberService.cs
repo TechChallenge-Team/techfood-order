@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace TechFood.Order.Application.Common.Services.Interfaces;
+namespace TechFood.Order.Application.Services.Interfaces;
 
 public interface IOrderNumberService
 {

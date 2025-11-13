@@ -2,8 +2,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using TechFood.Order.Application.Common.Services.Interfaces;
 using TechFood.Order.Application.Dto;
+using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Domain.Entities;
 using TechFood.Order.Domain.Repositories;
 
@@ -11,13 +11,13 @@ namespace TechFood.Order.Application.Commands.CreateOrder;
 
 public class CreateOrderCommandHandler(
     IOrderRepository orderRepo,
-    IProductService productService,
+    IBackofficeService backofficeService,
     IOrderNumberService orderNumberService
         ) : IRequestHandler<CreateOrderCommand, OrderDto>
 {
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var products = await productService.GetProductsAsync(cancellationToken);
+        var products = await backofficeService.GetProductsAsync(cancellationToken);
 
         var number = await orderNumberService.GetAsync();
         var order = new Domain.Entities.Order(number, request.CustomerId);
@@ -26,7 +26,10 @@ public class CreateOrderCommandHandler(
             .Select(item =>
             {
                 var product = products.First(p => p!.Id == item.ProductId)!;
-                var orderItem = new OrderItem(product.Id, product.Price, item.Quantity);
+                var orderItem = new OrderItem(
+                    product.Id,
+                    product.Price,
+                    item.Quantity);
 
                 return (product, orderItem);
             })
