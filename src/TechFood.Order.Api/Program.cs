@@ -18,8 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddInfra();
 
     builder.Services.AddAuthorizationBuilder()
-            .AddPolicy("orders.read", policy => policy.RequireClaim("scope", "orders.read"))
-            .AddPolicy("orders.write", policy => policy.RequireClaim("scope", "orders.write"));
+        .AddPolicy("orders.read", policy => policy.RequireClaim("scope", "orders.read"))
+        .AddPolicy("orders.write", policy => policy.RequireClaim("scope", "orders.write"));
 }
 
 var app = builder.Build();
