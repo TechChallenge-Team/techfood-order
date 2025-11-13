@@ -6,11 +6,12 @@ on:
   pull_request:
     branches:
       - "**"
+
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -18,39 +19,33 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "8.0.x"
-      - name: Add GitHub Packages source
-        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
-      - name: Restore dependencies
-        run: dotnet restore src/TechFood.Order.Api/TechFood.Order.Api.csproj
-      - name: Build
-        run: dotnet build --configuration Release src/TechFood.Order.Api/TechFood.Order.Api.csproj
-      - name: Restore dependencies (Worker)
-        run: dotnet restore src/TechFood.Order.Worker/TechFood.Order.Worker.csproj
-      - name: Build (Worker)
-        run: dotnet build --configuration Release src/TechFood.Order.Worker/TechFood.Order.Worker.csproj
-      - name: Test
-        run: dotnet test
 
-  test-validation:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
         with:
-          dotnet-version: "8.0.x"
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
       - name: Add GitHub Packages source
         run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
+
       - name: Restore dependencies
-        run: dotnet restore tests/TechFood.Order.Domain.Tests/TechFood.Order.Domain.Tests.csproj
-      - name: Run tests with coverage
-        run: dotnet test tests/TechFood.Order.Domain.Tests/TechFood.Order.Domain.Tests.csproj --collect:"XPlat Code Coverage" --results-directory tests/TechFood.Order.Domain.Tests/TestResults
-      - name: List TestResults files
-        run: ls -R tests/TechFood.Order.Domain.Tests/TestResults
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test with coverage
+        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
       - name: Generate coverage report
-        run: reportgenerator -reports:tests/TechFood.Order.Domain.Tests/TestResults/*/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:TextSummary
+        run: reportgenerator -reports:./TestResults/*/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:TextSummary
+
       - name: Check coverage threshold
         run: |
           COVERAGE=$(cat coverage-report/Summary.txt | grep 'Line coverage' | awk '{print $3}' | sed 's/%//')
@@ -62,16 +57,22 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    needs: [build, test-validation]
+    needs: test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     steps:
       - uses: actions/checkout@v3
+
       - name: Build Docker image (API)
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/techfood-api:latest -f src/TechFood.Order.Api/Dockerfile .
+
       - name: Build Docker image (Worker)
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/techfood-worker:latest -f src/TechFood.Order.Worker/Dockerfile .
+
       - name: Login to Docker Hub
         run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
       - name: Push Docker image (API)
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/techfood-api:latest
+
       - name: Push Docker image (Worker)
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/techfood-worker:latest
