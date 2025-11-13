@@ -4,16 +4,20 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TechFood.Order.Application.Dto;
 using TechFood.Order.Application.Queries;
+using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Shared.Domain.Enums;
 
 namespace TechFood.Order.Infra.Persistence.Queries;
 
-internal class OrderQueryProvider(OrderContext techFoodContext) : IOrderQueryProvider
+internal class OrderQueryProvider(
+    IBackofficeService backofficeService,
+    OrderContext techFoodContext
+        ) : IOrderQueryProvider
 {
     public async Task<List<OrderDto>> GetOrdersAsync()
     {
-        //var products = await techFoodContext.Products.ToListAsync();
+        var products = await backofficeService.GetProductsAsync();
 
         var result = await techFoodContext.Orders
             .AsNoTracking()
@@ -31,21 +35,19 @@ internal class OrderQueryProvider(OrderContext techFoodContext) : IOrderQueryPro
                 data.Status,
                 [.. data.Items.Select(item =>
                 {
-                    //var product = products.FirstOrDefault(p => p.Id == item.ProductId);
+                    var product = products.FirstOrDefault(p => p.Id == item.ProductId);
 
                     return new OrderItemDto(
                         item.Id,
-                        null!,
-                        null!,
-                         //product!.Name,
-                         //product.ImageUrl,
+                        product!.Name,
+                        product.ImageUrl,
                         item.UnitPrice, item.Quantity);
                 })]))];
     }
 
     public async Task<List<OrderDto>> GetReadyOrdersAsync()
     {
-        //var products = await techFoodContext.Products.ToListAsync();
+        var products = await backofficeService.GetProductsAsync();
 
         var result = await techFoodContext.Orders
             .AsNoTracking()
@@ -64,14 +66,12 @@ internal class OrderQueryProvider(OrderContext techFoodContext) : IOrderQueryPro
                  data.Status,
                  [.. data.Items.Select(item =>
                  {
-                     //var product = products.FirstOrDefault(p => p.Id == item.ProductId);
+                     var product = products.FirstOrDefault(p => p.Id == item.ProductId);
 
                      return new OrderItemDto(
                          item.Id,
-                         null!,
-                         null!,
-                         //product!.Name,
-                         //product.ImageUrl,
+                         product!.Name,
+                         product.ImageUrl,
                          item.UnitPrice, item.Quantity);
                  })]))];
     }
