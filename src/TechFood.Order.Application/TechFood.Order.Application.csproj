@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Common\Services\Resources.resx" />
+    <EmbeddedResource Remove="Services\Resources.resx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,12 +22,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Common\Resources\Exceptions.Designer.cs">
+	  <Compile Update="Resources\Exceptions.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Exceptions.resx</DependentUpon>
 	  </Compile>
-	  <Compile Update="Common\Resources\Validators.Designer.cs">
+	  <Compile Update="Resources\Validators.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Validators.resx</DependentUpon>
@@ -35,11 +35,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Common\Resources\Exceptions.resx">
+	  <EmbeddedResource Update="Resources\Exceptions.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
-	  <EmbeddedResource Update="Common\Resources\Validators.resx">
+	  <EmbeddedResource Update="Resources\Validators.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Validators.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>

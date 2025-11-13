@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TechFood.Order.Application.Common.Resources {
+namespace TechFood.Order.Application.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace TechFood.Order.Application.Common.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Validators {
+    internal class Exceptions {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Validators() {
+        internal Exceptions() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace TechFood.Order.Application.Common.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TechFood.Order.Application.Common.Resources.Validators", typeof(Validators).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TechFood.Order.Application.Resources.Exceptions", typeof(Exceptions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,29 @@ namespace TechFood.Order.Application.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The description is required..
+        ///   Looks up a localized string similar to Item Not Found..
         /// </summary>
-        internal static string CreateMerchantCommand_DescriptionCannotBeNullOrEmpty {
+        internal static string Order_ItemNotFound {
             get {
-                return ResourceManager.GetString("CreateMerchantCommand_DescriptionCannotBeNullOrEmpty", resourceCulture);
+                return ResourceManager.GetString("Order_ItemNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name is required..
+        ///   Looks up a localized string similar to Order not found..
         /// </summary>
-        internal static string CreateMerchantCommand_NameCannotBeNullOrEmpty {
+        internal static string Order_OrderNotFound {
             get {
-                return ResourceManager.GetString("CreateMerchantCommand_NameCannotBeNullOrEmpty", resourceCulture);
+                return ResourceManager.GetString("Order_OrderNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The end cannot be less then start time..
+        ///   Looks up a localized string similar to The command state is not valid for the current request..
         /// </summary>
-        internal static string CreateMerchantCommand_ShiftEndLessThenStartTime {
+        internal static string ValidationException_Message {
             get {
-                return ResourceManager.GetString("CreateMerchantCommand_ShiftEndLessThenStartTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The shift(s): {Duplicates} is(are) duplicated..
-        /// </summary>
-        internal static string CreateMerchantCommand_TheShiftAreDuplicates {
-            get {
-                return ResourceManager.GetString("CreateMerchantCommand_TheShiftAreDuplicates", resourceCulture);
+                return ResourceManager.GetString("ValidationException_Message", resourceCulture);
             }
         }
     }

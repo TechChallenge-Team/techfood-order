@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using TechFood.Order.Application.Common.Resources;
+using TechFood.Order.Application.Resources;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Shared.Application.Events;
 

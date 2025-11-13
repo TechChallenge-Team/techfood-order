@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TechFood.Order.Application.Common.Services.Interfaces;
 
-namespace TechFood.Order.Application.Common.Services;
+namespace TechFood.Order.Infra.Services;
 
 public class OrderNumberService : IOrderNumberService
 {

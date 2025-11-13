@@ -35,6 +35,7 @@ public static class DependencyInjection
 
         //Services
         services.AddTechFoodClient<IProductService, ProductService>("Backoffice");
+        services.AddSingleton<IOrderNumberService, OrderNumberService>();
 
         return services;
     }
