@@ -34,7 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IOrderQueryProvider, OrderQueryProvider>();
 
         //Services
-        services.AddTechFoodClient<IProductService, ProductService>("backoffice");
+        services.AddTechFoodClient<IProductService, ProductService>("Backoffice");
 
         return services;
     }
