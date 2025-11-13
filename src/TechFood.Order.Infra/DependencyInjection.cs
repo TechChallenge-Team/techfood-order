@@ -2,11 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TechFood.Order.Application;
+using TechFood.Order.Application.Common.Services.Interfaces;
 using TechFood.Order.Application.Queries;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Order.Infra.Persistence.Queries;
 using TechFood.Order.Infra.Persistence.Repositories;
+using TechFood.Order.Infra.Services;
 using TechFood.Shared.Infra.Extensions;
 
 namespace TechFood.Order.Infra;
@@ -30,6 +32,9 @@ public static class DependencyInjection
 
         //Queries
         services.AddScoped<IOrderQueryProvider, OrderQueryProvider>();
+
+        //Services
+        services.AddTechFoodClient<IProductService, ProductService>("backoffice");
 
         return services;
     }
