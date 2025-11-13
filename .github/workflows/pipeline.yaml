@@ -37,8 +37,17 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test with coverage
-        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+      - name: Test - Domain
+        run: dotnet test tests/TechFood.Order.Domain.Tests/TechFood.Order.Domain.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Test - Application
+        run: dotnet test tests/TechFood.Order.Application.Tests/TechFood.Order.Application.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Test - Api
+        run: dotnet test tests/TechFood.Order.Api.Tests/TechFood.Order.Api.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Test - Integration
+        run: dotnet test tests/TechFood.Order.Integration.Tests/TechFood.Order.Integration.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool

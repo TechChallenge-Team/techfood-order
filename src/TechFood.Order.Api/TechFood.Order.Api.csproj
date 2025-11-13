@@ -19,6 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="TechFood.Order.Api.Tests" />
+    <InternalsVisibleTo Include="TechFood.Order.Integration.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TechFood.Order.Application\TechFood.Order.Application.csproj" />
     <ProjectReference Include="..\TechFood.Order.Contracts\TechFood.Order.Contracts.csproj" />
     <ProjectReference Include="..\TechFood.Order.Infra\TechFood.Order.Infra.csproj" />

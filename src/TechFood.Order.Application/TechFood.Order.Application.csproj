@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8</TargetFramework>
@@ -6,15 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Services\Resources.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="TechFood.Shared.Application" Version="0.2.4-rc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TechFood.Order.Application.Tests" />
   </ItemGroup>
 
 	<ItemGroup>
