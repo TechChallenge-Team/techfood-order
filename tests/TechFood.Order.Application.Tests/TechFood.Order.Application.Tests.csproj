@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TechFood.Order.Application\TechFood.Order.Application.csproj" />
     <ProjectReference Include="..\..\src\TechFood.Order.Domain\TechFood.Order.Domain.csproj" />
+    <ProjectReference Include="..\..\src\TechFood.Order.Infra\TechFood.Order.Infra.csproj" />
   </ItemGroup>
 
 </Project>

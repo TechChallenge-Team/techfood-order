@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="TechFood.Order.Application.Tests" />
     <InternalsVisibleTo Include="TechFood.Order.Integration.Tests" />
   </ItemGroup>
 
