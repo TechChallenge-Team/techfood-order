@@ -12,8 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
         SwaggerTitle = "TechFood Order API V1",
         SwaggerDescription = "TechFood Order API V1"
     });
+
     builder.Services.AddApplication();
+
     builder.Services.AddInfra();
+
+    builder.Services.AddAuthorizationBuilder()
+            .AddPolicy("orders.read", policy => policy.RequireClaim("scope", "orders.read"))
+            .AddPolicy("orders.write", policy => policy.RequireClaim("scope", "orders.write"));
 }
 
 var app = builder.Build();
