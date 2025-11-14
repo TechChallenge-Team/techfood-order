@@ -16,8 +16,8 @@ COPY ["src/TechFood.Order.Contracts/TechFood.Order.Contracts.csproj", "TechFood.
 COPY ["src/TechFood.Order.Domain/TechFood.Order.Domain.csproj", "TechFood.Order.Domain/"]
 COPY ["src/TechFood.Order.Infra/TechFood.Order.Infra.csproj", "TechFood.Order.Infra/"]
 RUN dotnet restore "./TechFood.Order.Api/TechFood.Order.Api.csproj"
-COPY /src .
-WORKDIR TechFood.Order.Api
+COPY src/ .
+WORKDIR /src/TechFood.Order.Api
 RUN dotnet build "./TechFood.Order.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
