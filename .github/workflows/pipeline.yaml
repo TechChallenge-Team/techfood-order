@@ -48,6 +48,9 @@ jobs:
           New-Item -Path ${{ runner.temp }}\scanner -ItemType Directory -Force
           dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}\scanner
 
+      - name: Install ReportGenerator
+        run: dotnet tool update dotnet-reportgenerator-globaltool --tool-path ${{ runner.temp }}\reportgenerator
+
       - name: Begin SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -89,6 +92,12 @@ jobs:
 
       - name: Test - Integration
         run: dotnet test tests/TechFood.Order.Integration.Tests/TechFood.Order.Integration.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults --settings coverlet.runsettings
+
+      - name: Generate coverage report
+        run: ${{ runner.temp }}\reportgenerator\reportgenerator -reports:./TestResults/*/coverage.opencover.xml -targetdir:coverage-report -reporttypes:TextSummary
+
+      - name: Display coverage summary
+        run: Get-Content coverage-report/Summary.txt
 
       - name: End SonarCloud analysis
         env:

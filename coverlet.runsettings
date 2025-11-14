@@ -4,7 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>cobertura,opencover</Format>
+          <Format>opencover</Format>
           <ExcludeByFile>
             **/*Program.cs,
             **/*DependencyInjection.cs,
