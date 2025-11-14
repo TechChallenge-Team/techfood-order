@@ -15,14 +15,12 @@ public class OrderWorkflowTests : IClassFixture<IntegrationTestFixture>
     private readonly IntegrationTestFixture _fixture;
     private readonly IMediator _mediator;
     private readonly IOrderRepository _orderRepository;
-    private readonly IUnitOfWorkTransaction _transaction;
 
     public OrderWorkflowTests(IntegrationTestFixture fixture)
     {
         _fixture = fixture;
         _mediator = _fixture.ServiceProvider.GetRequiredService<IMediator>();
         _orderRepository = _fixture.ServiceProvider.GetRequiredService<IOrderRepository>();
-        _transaction = _fixture.ServiceProvider.GetRequiredService<IUnitOfWorkTransaction>();
     }
 
     [Fact(DisplayName = "Should complete full order workflow from creation to delivery")]
@@ -52,7 +50,7 @@ public class OrderWorkflowTests : IClassFixture<IntegrationTestFixture>
 
         var orderDto = await _mediator.Send(createCommand);
 
-        await _transaction.CommitAsync();
+        await _fixture.DbContext.SaveChangesAsync();
 
         orderDto.Should().NotBeNull();
         orderDto.Status.Should().Be(OrderStatusType.Pending);
@@ -147,7 +145,7 @@ public class OrderWorkflowTests : IClassFixture<IntegrationTestFixture>
 
         var orderDto = await _mediator.Send(createCommand);
 
-        await _transaction.CommitAsync();
+        await _fixture.DbContext.SaveChangesAsync();
 
         // Act
         var order = await _orderRepository.GetByIdAsync(orderDto.Id);
