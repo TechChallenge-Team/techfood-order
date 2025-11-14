@@ -81,17 +81,15 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test - Domain
-        run: dotnet test tests/TechFood.Order.Domain.Tests/TechFood.Order.Domain.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults --settings coverlet.runsettings
-
-      - name: Test - Application
-        run: dotnet test tests/TechFood.Order.Application.Tests/TechFood.Order.Application.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults --settings coverlet.runsettings
-
-      - name: Test - Api
-        run: dotnet test tests/TechFood.Order.Api.Tests/TechFood.Order.Api.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults --settings coverlet.runsettings
-
-      - name: Test - Integration
-        run: dotnet test tests/TechFood.Order.Integration.Tests/TechFood.Order.Integration.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults --settings coverlet.runsettings
+      - name: Test
+        run: >
+          dotnet test 
+          --no-build 
+          --configuration Release 
+          --collect:"XPlat Code Coverage" 
+          --results-directory ./TestResults 
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.ExcludeByFile="**/*Program.cs,**/*DependencyInjection.cs,**/*RequestPipeline.cs,**/*Resources/*.cs,**/*Migrations/*.cs,**/*Persistence/Contexts/*.cs,**/*Persistence/Mappings/*.cs,**/*Persistence/ValueObjectMappings/*.cs"
 
       - name: Generate coverage report
         run: ${{ runner.temp }}\reportgenerator\reportgenerator -reports:./TestResults/*/coverage.opencover.xml -targetdir:coverage-report -reporttypes:TextSummary
