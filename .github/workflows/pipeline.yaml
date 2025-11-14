@@ -11,7 +11,6 @@ jobs:
   test:
     runs-on: windows-latest
     env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       COVERAGE_PATH: "./TestResults/*/coverage.opencover.xml"
       COVERAGE_EXCLUSIONS: "**/Program.cs,**/DependencyInjection.cs,**/RequestPipeline.cs,**/Resources/*.cs,**/Migrations/**/*.cs,**/Persistence/Contexts/**/*.cs,**/Persistence/Mappings/**/*.cs,**/Persistence/ValueObjectMappings/**/*.cs"
     steps:
@@ -56,6 +55,8 @@ jobs:
         run: dotnet tool update dotnet-reportgenerator-globaltool --tool-path ${{ runner.temp }}\reportgenerator
 
       - name: Begin SonarCloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
           ${{ runner.temp }}\scanner\dotnet-sonarscanner begin `
@@ -100,6 +101,8 @@ jobs:
         run: Get-Content coverage-report/Summary.txt
 
       - name: End SonarCloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
           ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
