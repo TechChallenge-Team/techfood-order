@@ -7,24 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Menu\**" />
-    <Compile Remove="Preparations\**" />
-    <EmbeddedResource Remove="Menu\**" />
-    <EmbeddedResource Remove="Preparations\**" />
-    <None Remove="Menu\**" />
-    <None Remove="Preparations\**" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TechFood.Order.Domain\TechFood.Order.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\" />
   </ItemGroup>
 
 </Project>
