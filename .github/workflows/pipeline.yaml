@@ -53,7 +53,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"TechChallenge-Team_techfood-order" /o:"techchallenge-team" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.cobertura.xml"
+          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"TechChallenge-Team_techfood-order" /o:"techchallenge-team" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.cobertura.reportsPaths="**/TestResults/**/coverage.cobertura.xml"
 
       - name: Cache NuGet packages
         uses: actions/cache@v3
