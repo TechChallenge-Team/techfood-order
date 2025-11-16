@@ -60,7 +60,7 @@ jobs:
           ${{ runner.temp }}/scanner/dotnet-sonarscanner begin \
             /k:"TechChallenge-Team_techfood-order" \
             /o:"techchallenge-team" \
-            /d:sonar.token="${SONAR_TOKEN}" \
+            /d:sonar.token="${{ env.SONAR_TOKEN }}" \
             /d:sonar.qualitygate.wait=true \
             /d:sonar.cs.opencover.reportsPaths="${{ env.COVERAGE_PATH }}" \
             /d:sonar.coverage.exclusions="${{ env.COVERAGE_EXCLUSIONS }}"
@@ -76,7 +76,7 @@ jobs:
       - name: Add GitHub Packages source
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget add source --username ${{ github.actor }} --password $env:GITHUB_TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
+        run: dotnet nuget add source --username ${{ github.actor }} --password ${{ env.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -104,7 +104,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ${{ runner.temp }}/scanner/dotnet-sonarscanner end /d:sonar.token="${SONAR_TOKEN}"
+          ${{ runner.temp }}/scanner/dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
 
   publish:
     runs-on: ubuntu-latest
@@ -130,7 +130,7 @@ jobs:
             -t ${{ vars.DOCKERHUB_USERNAME }}/techfood-order-api:latest \
             -t ${{ vars.DOCKERHUB_USERNAME }}/techfood-order-api:${{ github.sha }} \
             -f src/TechFood.Order.Api/Dockerfile \
-            --build-arg GITHUB_TOKEN=$GITHUB_TOKEN \
+            --build-arg GITHUB_TOKEN=${{ env.GITHUB_TOKEN }} \
             --build-arg GITHUB_ACTOR=${{ github.actor }} \
             --cache-from type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/techfood-order-api:latest \
             --push \
@@ -144,7 +144,7 @@ jobs:
             -t ${{ vars.DOCKERHUB_USERNAME }}/techfood-order-worker:latest \
             -t ${{ vars.DOCKERHUB_USERNAME }}/techfood-order-worker:${{ github.sha }} \
             -f src/TechFood.Order.Worker/Dockerfile \
-            --build-arg GITHUB_TOKEN=$GITHUB_TOKEN \
+            --build-arg GITHUB_TOKEN=${{ env.GITHUB_TOKEN }} \
             --build-arg GITHUB_ACTOR=${{ github.actor }} \
             --cache-from type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/techfood-order-worker:latest \
             --push \
