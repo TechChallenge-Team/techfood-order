@@ -57,7 +57,6 @@ jobs:
       - name: Begin SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: powershell
         run: |
           ${{ runner.temp }}\scanner\dotnet-sonarscanner begin `
@@ -79,7 +78,7 @@ jobs:
       - name: Add GitHub Packages source
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget add source --username ${{ github.actor }} --password $GITHUB_TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
+        run: dotnet nuget add source --username ${{ github.actor }} --password $env:GITHUB_TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
 
       - name: Restore dependencies
         run: dotnet restore
