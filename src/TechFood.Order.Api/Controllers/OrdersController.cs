@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TechFood.Order.Application.Commands.CreateOrder;
 using TechFood.Order.Application.Commands.DeliverOrder;
+using TechFood.Order.Application.Queries.GetById;
 using TechFood.Order.Application.Queries.GetOrders;
 using TechFood.Order.Application.Queries.GetReadyOrders;
 using TechFood.Order.Contracts.Orders;
@@ -33,6 +34,16 @@ public class OrdersController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetAllAsync()
     {
         var query = new GetOrdersQuery();
+
+        var result = await _mediator.Send(query);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetAllAsync(Guid id)
+    {
+        var query = new GetOrderByIdQuery(id);
 
         var result = await _mediator.Send(query);
 
