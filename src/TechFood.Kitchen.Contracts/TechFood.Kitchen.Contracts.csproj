@@ -23,8 +23,4 @@
     <ProjectReference Include="..\TechFood.Kitchen.Domain\TechFood.Kitchen.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
-
 </Project>
