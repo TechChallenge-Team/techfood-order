@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TechFood.Order.Application;
 using TechFood.Order.Application.Queries;
+using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Order.Infra.Persistence.Queries;
 using TechFood.Order.Infra.Persistence.Repositories;
+using TechFood.Order.Infra.Services;
 using TechFood.Shared.Infra.Extensions;
 
 namespace TechFood.Order.Infra;
@@ -22,7 +24,7 @@ public static class DependencyInjection
                 var config = serviceProvider.GetRequiredService<IConfiguration>();
                 dbOptions.UseSqlServer(config.GetConnectionString("DataBaseConection"));
             },
-            ApplicationAssembly = typeof(DependecyInjection).Assembly
+            ApplicationAssembly = typeof(Application.DependencyInjection).Assembly
         });
 
         //Data
@@ -30,6 +32,10 @@ public static class DependencyInjection
 
         //Queries
         services.AddScoped<IOrderQueryProvider, OrderQueryProvider>();
+
+        //Services
+        services.AddTechFoodClient<IBackofficeService, BackofficeService>("Backoffice");
+        services.AddSingleton<IOrderNumberService, OrderNumberService>();
 
         return services;
     }

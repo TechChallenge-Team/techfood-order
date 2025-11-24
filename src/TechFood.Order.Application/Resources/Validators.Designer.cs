@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TechFood.Order.Application.Common.Resources {
+namespace TechFood.Order.Application.Resources {
     using System;
     
     
@@ -19,17 +19,17 @@ namespace TechFood.Order.Application.Common.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Exceptions {
+    internal class Validators {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Exceptions() {
+        internal Validators() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace TechFood.Order.Application.Common.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TechFood.Order.Application.Common.Resources.Exceptions", typeof(Exceptions).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TechFood.Order.Application.Resources.Validators", typeof(Validators).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,33 +57,6 @@ namespace TechFood.Order.Application.Common.Resources {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Item Not Found..
-        /// </summary>
-        internal static string Order_ItemNotFound {
-            get {
-                return ResourceManager.GetString("Order_ItemNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Order not found..
-        /// </summary>
-        internal static string Order_OrderNotFound {
-            get {
-                return ResourceManager.GetString("Order_OrderNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The command state is not valid for the current request..
-        /// </summary>
-        internal static string ValidationException_Message {
-            get {
-                return ResourceManager.GetString("ValidationException_Message", resourceCulture);
             }
         }
     }

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TechFood.Order.Application.Commands.CreateOrder;
 using TechFood.Order.Application.Commands.DeliverOrder;
@@ -11,11 +12,13 @@ namespace TechFood.Order.Api.Controllers;
 
 [ApiController()]
 [Route("v1/[controller]")]
+[Authorize]
 public class OrdersController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
 
     [HttpPost]
+    [Authorize(Policy = "orders.write")]
     public async Task<IActionResult> CreateAsync(CreateOrderRequest request)
     {
         var command = new CreateOrderCommand(
@@ -31,6 +34,7 @@ public class OrdersController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "orders.read")]
     public async Task<IActionResult> GetAllAsync()
     {
         var query = new GetOrdersQuery();
@@ -52,6 +56,7 @@ public class OrdersController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     [Route("ready")]
+    [Authorize(Policy = "orders.read")]
     public async Task<IActionResult> GetReadyAsync()
     {
         var query = new GetReadyOrdersQuery();
@@ -63,6 +68,7 @@ public class OrdersController(IMediator mediator) : ControllerBase
 
     [HttpPatch]
     [Route("{id:guid}/deliver")]
+    [Authorize(Policy = "orders.write")]
     public async Task<IActionResult> DeliverAsync(Guid id)
     {
         var command = new DeliverOrderCommand(id);
