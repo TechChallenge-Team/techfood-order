@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,27 +6,13 @@ using TechFood.Order.Application.Dto;
 using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Domain.Entities;
 using TechFood.Order.Domain.Repositories;
-using TechFood.Shared.Application.Events;
 
 namespace TechFood.Order.Application.Commands.CreateOrder;
-
-public record OrderCreatedIntegrationEvent(
-    Guid OrderId,
-    List<OrderItemCreatedDto> Items
-) : IIntegrationEvent;
-
-public record OrderItemCreatedDto(
-    Guid ProductId,
-    string Name,
-    decimal UnitPrice,
-    int Quantity
-);
 
 public class CreateOrderCommandHandler(
     IOrderRepository orderRepo,
     IBackofficeService backofficeService,
-    IOrderNumberService orderNumberService,
-    IMediator mediator
+    IOrderNumberService orderNumberService
         ) : IRequestHandler<CreateOrderCommand, OrderDto>
 {
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -57,17 +41,6 @@ public class CreateOrderCommandHandler(
         }
 
         await orderRepo.AddAsync(order);
-
-        await mediator.Publish(new OrderCreatedIntegrationEvent(
-            order.Id,
-            items.ConvertAll(item =>
-                new OrderItemCreatedDto(
-                    item.product.Id,
-                    item.product.Name,
-                    item.product.Price,
-                    item.orderItem.Quantity
-                )
-            )), cancellationToken);
 
         return new OrderDto(
             order.Id,
