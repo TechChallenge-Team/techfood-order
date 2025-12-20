@@ -45,7 +45,7 @@ public class OrdersController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetAllAsync(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var query = new GetOrderByIdQuery(id);
 

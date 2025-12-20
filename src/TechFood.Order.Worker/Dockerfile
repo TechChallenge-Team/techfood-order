@@ -17,15 +17,15 @@ COPY ["src/TechFood.Order.Application/TechFood.Order.Application.csproj", "TechF
 COPY ["src/TechFood.Order.Contracts/TechFood.Order.Contracts.csproj", "TechFood.Order.Contracts/"]
 COPY ["src/TechFood.Order.Domain/TechFood.Order.Domain.csproj", "TechFood.Order.Domain/"]
 COPY ["src/TechFood.Order.Infra/TechFood.Order.Infra.csproj", "TechFood.Order.Infra/"]
-RUN dotnet nuget add source --username ${GITHUB_ACTOR} --password ${GITHUB_TOKEN} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
+RUN dotnet nuget add source --username "${GITHUB_ACTOR}" --password "${GITHUB_TOKEN}" --store-password-in-clear-text --name github "https://nuget.pkg.github.com/TechChallenge-Team/index.json"
 RUN dotnet restore "./TechFood.Order.Worker/TechFood.Order.Worker.csproj"
 COPY src/ .
 WORKDIR /src/TechFood.Order.Worker
-RUN dotnet build "./TechFood.Order.Worker.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./TechFood.Order.Worker.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./TechFood.Order.Worker.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./TechFood.Order.Worker.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
