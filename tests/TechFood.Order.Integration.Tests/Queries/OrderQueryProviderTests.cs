@@ -298,6 +298,222 @@ public class OrderQueryProviderTests : IDisposable
         orderDto.Items.Select(i => i.Name).Should().Contain(new[] { "Product 1", "Product 2", "Product 3" });
     }
 
+    [Fact(DisplayName = "Should return order by Id when it exists")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldReturnOrder_WhenItExists()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var customerId = Guid.NewGuid();
+
+        var order = new Domain.Entities.Order(100, customerId);
+        order.AddItem(new Domain.Entities.OrderItem(productId, 15.50m, 2));
+
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(order.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Id.Should().Be(order.Id);
+        result.Number.Should().Be(100);
+        result.CustomerId.Should().Be(customerId);
+        result.Amount.Should().Be(31.00m);
+        result.Status.Should().Be(OrderStatusType.Pending);
+        result.Items.Should().HaveCount(1);
+        result.Items[0].Quantity.Should().Be(2);
+        result.Items[0].Price.Should().Be(15.50m);
+    }
+
+    [Fact(DisplayName = "Should return null when order does not exist")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldReturnNull_WhenOrderDoesNotExist()
+    {
+        // Arrange
+        var nonExistentId = Guid.NewGuid();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(nonExistentId);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "Should return order without customer")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldReturnOrder_WithoutCustomer()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+
+        var order = new Domain.Entities.Order(200, null);
+        order.AddItem(new Domain.Entities.OrderItem(productId, 10.00m, 1));
+
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(order.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.CustomerId.Should().BeNull();
+        result.Number.Should().Be(200);
+    }
+
+    [Fact(DisplayName = "Should return order with multiple items")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldReturnOrder_WithMultipleItems()
+    {
+        // Arrange
+        var productId1 = Guid.NewGuid();
+        var productId2 = Guid.NewGuid();
+        var productId3 = Guid.NewGuid();
+
+        var order = new Domain.Entities.Order(300, Guid.NewGuid());
+        order.AddItem(new Domain.Entities.OrderItem(productId1, 10.00m, 2));
+        order.AddItem(new Domain.Entities.OrderItem(productId2, 15.00m, 1));
+        order.AddItem(new Domain.Entities.OrderItem(productId3, 20.00m, 3));
+
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(order.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(3);
+        result.Items.Sum(i => i.Price * i.Quantity).Should().Be(result.Amount);
+    }
+
+    [Fact(DisplayName = "Should return order with no items")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldReturnOrder_WithNoItems()
+    {
+        // Arrange
+        var order = new Domain.Entities.Order(400, Guid.NewGuid());
+
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(order.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Items.Should().BeEmpty();
+        result.Amount.Should().Be(0m);
+    }
+
+    [Theory(DisplayName = "Should return order with different statuses")]
+    [Trait("Integration", "OrderQueryProvider")]
+    [InlineData(OrderStatusType.Pending)]
+    [InlineData(OrderStatusType.Received)]
+    [InlineData(OrderStatusType.InPreparation)]
+    [InlineData(OrderStatusType.Ready)]
+    [InlineData(OrderStatusType.Delivered)]
+    public async Task GetOrderByIdAsync_ShouldReturnOrder_WithCorrectStatus(OrderStatusType expectedStatus)
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var order = new Domain.Entities.Order(500, Guid.NewGuid());
+        order.AddItem(new Domain.Entities.OrderItem(productId, 10.00m, 1));
+
+        // Set the status based on test parameter
+        if (expectedStatus >= OrderStatusType.Received)
+            order.Receive();
+        if (expectedStatus >= OrderStatusType.InPreparation)
+            order.Prepare();
+        if (expectedStatus >= OrderStatusType.Ready)
+            order.Ready();
+        if (expectedStatus == OrderStatusType.Delivered)
+            order.Deliver();
+
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(order.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Status.Should().Be(expectedStatus);
+    }
+
+    [Fact(DisplayName = "Should handle Guid.Empty gracefully")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldReturnNull_WithEmptyGuid()
+    {
+        // Arrange
+        var emptyGuid = Guid.Empty;
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(emptyGuid);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "Should return correct order when multiple orders exist")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldReturnCorrectOrder_WhenMultipleExist()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        
+        var order1 = new Domain.Entities.Order(701, Guid.NewGuid());
+        order1.AddItem(new Domain.Entities.OrderItem(productId, 10.00m, 1));
+        
+        var order2 = new Domain.Entities.Order(702, Guid.NewGuid());
+        order2.AddItem(new Domain.Entities.OrderItem(productId, 20.00m, 2));
+        
+        var order3 = new Domain.Entities.Order(703, Guid.NewGuid());
+        order3.AddItem(new Domain.Entities.OrderItem(productId, 30.00m, 3));
+
+        await _context.Orders.AddRangeAsync(order1, order2, order3);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(order2.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Id.Should().Be(order2.Id);
+        result.Number.Should().Be(702);
+        result.Amount.Should().Be(40.00m);
+    }
+
+    [Fact(DisplayName = "Should include items in GetOrderByIdAsync")]
+    [Trait("Integration", "OrderQueryProvider")]
+    public async Task GetOrderByIdAsync_ShouldIncludeItems()
+    {
+        // Arrange
+        var productId1 = Guid.NewGuid();
+        var productId2 = Guid.NewGuid();
+        
+        var order = new Domain.Entities.Order(800, Guid.NewGuid());
+        order.AddItem(new Domain.Entities.OrderItem(productId1, 12.50m, 2));
+        order.AddItem(new Domain.Entities.OrderItem(productId2, 8.00m, 3));
+
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+
+        // Clear context to ensure fresh load
+        _context.ChangeTracker.Clear();
+
+        // Act
+        var result = await _queryProvider.GetOrderByIdAsync(order.Id);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.Items.Should().HaveCount(2);
+        result.Items.Should().Contain(i => i.Price == 12.50m && i.Quantity == 2);
+        result.Items.Should().Contain(i => i.Price == 8.00m && i.Quantity == 3);
+    }
+
     private static Domain.Entities.Order CreateReadyOrder(int number, Guid productId)
     {
         var order = new Domain.Entities.Order(number, Guid.NewGuid());
