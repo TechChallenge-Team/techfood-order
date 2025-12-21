@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,5 +75,32 @@ internal class OrderQueryProvider(
                          product.ImageUrl,
                          item.UnitPrice, item.Quantity);
                  })]))];
+    }
+
+    public async Task<OrderDto?> GetOrderByIdAsync(Guid id)
+    {
+        var data = await techFoodContext.Orders
+            .AsNoTracking()
+            .Include(order => order.Items)
+            .Where(order => order.Id == id)
+            .FirstOrDefaultAsync();
+
+        return data == null
+            ? null
+            : new OrderDto(
+                 data.Id,
+                 data.Number,
+                 data.Amount,
+                 data.CreatedAt,
+                 data.CustomerId,
+                 data.Status,
+                 [.. data.Items.Select(item =>
+                 {
+                     return new OrderItemDto(
+                         item.Id,
+                         null!,
+                         null!,
+                         item.UnitPrice, item.Quantity);
+                 })]);
     }
 }
