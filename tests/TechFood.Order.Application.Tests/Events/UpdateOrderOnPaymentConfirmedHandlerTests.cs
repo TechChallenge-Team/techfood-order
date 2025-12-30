@@ -1,4 +1,5 @@
-using TechFood.Order.Application.Events;
+using MediatR;
+using TechFood.Order.Application.Events.Handlers;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Shared.Domain.Enums;
 
@@ -7,12 +8,14 @@ namespace TechFood.Order.Application.Tests.Events;
 public class UpdateOrderOnPaymentConfirmedHandlerTests
 {
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
+    private readonly Mock<IMediator> _mediatorMock;
     private readonly UpdateOrderOnPaymentConfirmedHandler _handler;
 
     public UpdateOrderOnPaymentConfirmedHandlerTests()
     {
         _orderRepositoryMock = new Mock<IOrderRepository>();
-        _handler = new UpdateOrderOnPaymentConfirmedHandler(_orderRepositoryMock.Object);
+        _mediatorMock = new Mock<IMediator>();
+        _handler = new UpdateOrderOnPaymentConfirmedHandler(_orderRepositoryMock.Object, _mediatorMock.Object);
     }
 
     [Fact(DisplayName = "Should update order to received status when payment is confirmed")]

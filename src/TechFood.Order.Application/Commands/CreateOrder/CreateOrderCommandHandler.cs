@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TechFood.Order.Application.Dto;
+using TechFood.Order.Application.Events;
 using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Domain.Entities;
 using TechFood.Order.Domain.Repositories;
@@ -12,7 +13,8 @@ namespace TechFood.Order.Application.Commands.CreateOrder;
 public class CreateOrderCommandHandler(
     IOrderRepository orderRepo,
     IBackofficeService backofficeService,
-    IOrderNumberService orderNumberService
+    IOrderNumberService orderNumberService,
+    IMediator mediator
         ) : IRequestHandler<CreateOrderCommand, OrderDto>
 {
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -41,6 +43,8 @@ public class CreateOrderCommandHandler(
         }
 
         await orderRepo.AddAsync(order);
+
+        await mediator.Publish(new OrderCreatedIntegrationEvent(order.Id), cancellationToken);
 
         return new OrderDto(
             order.Id,
