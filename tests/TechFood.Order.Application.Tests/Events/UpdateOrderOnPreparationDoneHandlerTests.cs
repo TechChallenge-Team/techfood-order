@@ -1,4 +1,4 @@
-using TechFood.Order.Application.Events;
+using TechFood.Order.Application.Events.Handlers;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Shared.Domain.Enums;
 
