@@ -2,9 +2,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Shared.Domain.UoW;
+using TechFood.Shared.Infra.Extensions;
 using TechFood.Shared.Infra.Persistence.UoW;
 
 namespace TechFood.Order.Integration.Tests.Fixtures;
@@ -18,6 +20,9 @@ public class IntegrationTestFixture : IDisposable
     public IntegrationTestFixture()
     {
         var services = new ServiceCollection();
+
+        // Configure InfraOptions for OrderContext
+        services.AddOptions<InfraOptions>();
 
         // Configure in-memory database
         services.AddDbContext<OrderContext>(options =>
