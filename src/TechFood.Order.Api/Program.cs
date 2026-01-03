@@ -26,7 +26,7 @@ var app = builder.Build();
 {
     app.RunMigration<OrderContext>();
 
-    app.UsePathBase("/order");
+    app.UsePathBase("/api/order");
 
     app.UseForwardedHeaders();
 
