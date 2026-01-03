@@ -1,3 +1,4 @@
+using MediatR;
 using TechFood.Order.Application.Commands.CreateOrder;
 using TechFood.Order.Application.Dto;
 using TechFood.Order.Application.Services.Interfaces;
@@ -10,6 +11,7 @@ public class CreateOrderCommandHandlerTests
     private readonly Mock<IOrderRepository> _orderRepositoryMock;
     private readonly Mock<IBackofficeService> _backofficeServiceMock;
     private readonly Mock<IOrderNumberService> _orderNumberServiceMock;
+    private readonly Mock<IMediator> _mediatorMock;
     private readonly CreateOrderCommandHandler _handler;
 
     public CreateOrderCommandHandlerTests()
@@ -17,11 +19,13 @@ public class CreateOrderCommandHandlerTests
         _orderRepositoryMock = new Mock<IOrderRepository>();
         _backofficeServiceMock = new Mock<IBackofficeService>();
         _orderNumberServiceMock = new Mock<IOrderNumberService>();
+        _mediatorMock = new Mock<IMediator>();
 
         _handler = new CreateOrderCommandHandler(
             _orderRepositoryMock.Object,
             _backofficeServiceMock.Object,
-            _orderNumberServiceMock.Object);
+            _orderNumberServiceMock.Object,
+            _mediatorMock.Object);
     }
 
     [Fact(DisplayName = "Should create order successfully with valid items")]

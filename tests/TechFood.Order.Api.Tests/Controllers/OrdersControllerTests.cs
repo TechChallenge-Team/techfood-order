@@ -3,6 +3,7 @@ using TechFood.Order.Api.Controllers;
 using TechFood.Order.Application.Commands.CreateOrder;
 using TechFood.Order.Application.Commands.DeliverOrder;
 using TechFood.Order.Application.Dto;
+using TechFood.Order.Application.Queries.GetById;
 using TechFood.Order.Application.Queries.GetOrders;
 using TechFood.Order.Application.Queries.GetReadyOrders;
 using TechFood.Order.Contracts.Orders;
@@ -222,5 +223,149 @@ public class OrdersControllerTests
         var okResult = result as OkObjectResult;
         var orders = okResult!.Value as List<OrderDto>;
         orders.Should().BeEmpty();
+    }
+
+    [Fact(DisplayName = "GetById should return Ok with null when order not found")]
+    [Trait("Api", "OrdersController")]
+    public async Task GetById_WithNonExistingOrderId_ShouldReturnOkWithNull()
+    {
+        // Arrange
+        var orderId = Guid.NewGuid();
+
+        _mediatorMock
+            .Setup(x => x.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((OrderDto?)null);
+
+        // Act
+        var result = await _controller.GetById(orderId);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
+        okResult!.Value.Should().BeNull();
+
+        _mediatorMock.Verify(x => x.Send(
+            It.Is<GetOrderByIdQuery>(q => q.Id == orderId),
+            It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact(DisplayName = "GetById should return order without customer")]
+    [Trait("Api", "OrdersController")]
+    public async Task GetById_WithOrderWithoutCustomer_ShouldReturnOkWithOrder()
+    {
+        // Arrange
+        var orderId = Guid.NewGuid();
+
+        var orderItems = new List<OrderItemDto>
+        {
+            new OrderItemDto(
+                Guid.NewGuid(),
+                "Cheeseburger",
+                null,
+                15.00m,
+                1)
+        };
+
+        var expectedOrder = new OrderDto(
+            orderId,
+            456,
+            15.00m,
+            DateTime.Now,
+            null, // No customer
+            OrderStatusType.Pending,
+            orderItems);
+
+        _mediatorMock
+            .Setup(x => x.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedOrder);
+
+        // Act
+        var result = await _controller.GetById(orderId);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
+        var order = okResult!.Value as OrderDto;
+        
+        order.Should().NotBeNull();
+        order!.CustomerId.Should().BeNull();
+        order.Id.Should().Be(orderId);
+    }
+
+    [Fact(DisplayName = "GetById should return order with empty items list")]
+    [Trait("Api", "OrdersController")]
+    public async Task GetById_WithOrderWithNoItems_ShouldReturnOkWithEmptyList()
+    {
+        // Arrange
+        var orderId = Guid.NewGuid();
+
+        var expectedOrder = new OrderDto(
+            orderId,
+            100,
+            0m,
+            DateTime.Now,
+            Guid.NewGuid(),
+            OrderStatusType.Pending,
+            new List<OrderItemDto>());
+
+        _mediatorMock
+            .Setup(x => x.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedOrder);
+
+        // Act
+        var result = await _controller.GetById(orderId);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
+        var order = okResult!.Value as OrderDto;
+        
+        order.Should().NotBeNull();
+        order!.Items.Should().BeEmpty();
+    }
+
+
+
+    [Fact(DisplayName = "GetById should handle empty Guid")]
+    [Trait("Api", "OrdersController")]
+    public async Task GetById_WithEmptyGuid_ShouldReturnOkWithNull()
+    {
+        // Arrange
+        var emptyGuid = Guid.Empty;
+
+        _mediatorMock
+            .Setup(x => x.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((OrderDto?)null);
+
+        // Act
+        var result = await _controller.GetById(emptyGuid);
+
+        // Assert
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
+        okResult!.Value.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "GetById should pass correct Id to query")]
+    [Trait("Api", "OrdersController")]
+    public async Task GetById_ShouldPassCorrectIdToMediator()
+    {
+        // Arrange
+        var orderId = Guid.NewGuid();
+
+        _mediatorMock
+            .Setup(x => x.Send(It.IsAny<GetOrderByIdQuery>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((OrderDto?)null);
+
+        // Act
+        await _controller.GetById(orderId);
+
+        // Assert
+        _mediatorMock.Verify(
+            x => x.Send(
+                It.Is<GetOrderByIdQuery>(q => q.Id == orderId),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
     }
 }
