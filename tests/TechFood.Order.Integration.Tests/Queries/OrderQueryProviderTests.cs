@@ -1,10 +1,12 @@
 using Bogus;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TechFood.Order.Application.Dto;
 using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Order.Infra.Persistence.Queries;
 using TechFood.Shared.Domain.Enums;
+using TechFood.Shared.Infra.Extensions;
 
 namespace TechFood.Order.Integration.Tests.Queries;
 
@@ -17,11 +19,14 @@ public class OrderQueryProviderTests : IDisposable
 
     public OrderQueryProviderTests()
     {
+        // IOptions of InfraOptions is not needed for in-memory tests
+        var infraOptions = Options.Create(new InfraOptions());
+
         var options = new DbContextOptionsBuilder<OrderContext>()
             .UseInMemoryDatabase($"TestDb_{Guid.NewGuid()}")
             .Options;
 
-        _context = new OrderContext(options);
+        _context = new OrderContext(infraOptions, options);
         _backofficeServiceMock = new Mock<IBackofficeService>();
         _queryProvider = new OrderQueryProvider(_backofficeServiceMock.Object, _context);
         _faker = new Faker();

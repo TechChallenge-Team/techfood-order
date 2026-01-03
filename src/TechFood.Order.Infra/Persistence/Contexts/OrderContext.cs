@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TechFood.Order.Domain.Entities;
 using TechFood.Shared.Domain.Enums;
+using TechFood.Shared.Infra.Extensions;
 using TechFood.Shared.Infra.Persistence.Contexts;
 
 namespace TechFood.Order.Infra.Persistence.Contexts;
@@ -11,7 +13,10 @@ public class OrderContext : TechFoodContext
 {
     public DbSet<Domain.Entities.Order> Orders { get; set; } = null!;
 
-    public OrderContext(DbContextOptions<OrderContext> options) : base(options) { }
+    public OrderContext(
+        IOptions<InfraOptions> infraOptions,
+        DbContextOptions<OrderContext> options
+            ) : base(infraOptions, options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
