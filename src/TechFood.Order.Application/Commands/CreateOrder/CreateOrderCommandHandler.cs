@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using MediatR;
 using TechFood.Order.Application.Dto;
 using TechFood.Order.Application.Events;
+using TechFood.Order.Application.Events.Integration.Incoming;
+using TechFood.Order.Application.Events.Integration.Outgoing;
 using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Domain.Entities;
 using TechFood.Order.Domain.Repositories;
@@ -44,7 +46,7 @@ public class CreateOrderCommandHandler(
 
         await orderRepo.AddAsync(order);
 
-        await mediator.Publish(new OrderCreatedIntegrationEvent(order.Id), cancellationToken);
+        await mediator.Publish(new OrderCreatedEvent(order.Id), cancellationToken);
 
         return new OrderDto(
             order.Id,

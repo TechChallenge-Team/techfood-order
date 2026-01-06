@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8</TargetFramework>
@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TechFood.Shared.Domain" Version="0.2.4-rc" />
+    <PackageReference Include="TechFood.Shared.Domain" Version="0.2.6-rc" />
   </ItemGroup>
 
   <ItemGroup>

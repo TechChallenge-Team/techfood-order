@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8</TargetFramework>
@@ -15,7 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="TechFood.Shared.Presentation" Version="0.2.4-rc" />
+    <PackageReference Include="TechFood.Shared.Presentation" Version="0.2.6-rc" />
   </ItemGroup>
 
   <ItemGroup>

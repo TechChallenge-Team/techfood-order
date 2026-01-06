@@ -1,14 +1,10 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TechFood.Order.Application.Resources;
 using TechFood.Order.Domain.Repositories;
-using TechFood.Shared.Application.Events;
 
-namespace TechFood.Order.Application.Events.Handlers;
-
-public record PreparationDoneEvent(Guid OrderId) : IIntegrationEvent;
+namespace TechFood.Order.Application.Events.Integration.Incoming.Handlers;
 
 internal class UpdateOrderOnPreparationDoneHandler(IOrderRepository repo) : INotificationHandler<PreparationDoneEvent>
 {
