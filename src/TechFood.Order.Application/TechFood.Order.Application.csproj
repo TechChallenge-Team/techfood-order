@@ -45,4 +45,8 @@
 	  </EmbeddedResource>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Events\Domain\" />
+	</ItemGroup>
+
 </Project>

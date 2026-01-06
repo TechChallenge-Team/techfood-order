@@ -1,5 +1,6 @@
 using MediatR;
-using TechFood.Order.Application.Events.Handlers;
+using TechFood.Order.Application.Events.Integration.Incoming;
+using TechFood.Order.Application.Events.Integration.Incoming.Handlers;
 using TechFood.Order.Domain.Repositories;
 using TechFood.Shared.Domain.Enums;
 

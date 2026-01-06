@@ -1,14 +1,11 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using TechFood.Order.Application.Events.Integration.Outgoing;
 using TechFood.Order.Application.Resources;
 using TechFood.Order.Domain.Repositories;
-using TechFood.Shared.Application.Events;
 
-namespace TechFood.Order.Application.Events.Handlers;
-
-public record PaymentConfirmedEvent(Guid OrderId) : IIntegrationEvent;
+namespace TechFood.Order.Application.Events.Integration.Incoming.Handlers;
 
 internal class UpdateOrderOnPaymentConfirmedHandler(IOrderRepository repo, IMediator mediator)
     : INotificationHandler<PaymentConfirmedEvent>
@@ -22,6 +19,6 @@ internal class UpdateOrderOnPaymentConfirmedHandler(IOrderRepository repo, IMedi
 
         order.Receive();
 
-        await mediator.Publish(new OrderReceivedIntegrationEvent(notification.OrderId), cancellationToken);
+        await mediator.Publish(new OrderReceivedEvent(notification.OrderId), cancellationToken);
     }
 }
