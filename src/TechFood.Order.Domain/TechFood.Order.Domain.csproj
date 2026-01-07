@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TechFood.Shared.Domain" Version="0.2.6-rc" />
+    <PackageReference Include="TechFood.Shared.Domain" Version="0.2.7-rc" />
   </ItemGroup>
 
   <ItemGroup>
