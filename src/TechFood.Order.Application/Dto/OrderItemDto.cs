@@ -2,4 +2,4 @@ using System;
 
 namespace TechFood.Order.Application.Dto;
 
-public record OrderItemDto(Guid Id, string Name, string? ImageUrl, decimal Price, int Quantity);
+public record OrderItemDto(Guid Id, Guid ProductId, decimal Price, int Quantity);

@@ -5,21 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TechFood.Order.Application.Dto;
 using TechFood.Order.Application.Queries;
-using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Infra.Persistence.Contexts;
 using TechFood.Shared.Domain.Enums;
 
 namespace TechFood.Order.Infra.Persistence.Queries;
 
 internal class OrderQueryProvider(
-    IBackofficeService backofficeService,
     OrderContext techFoodContext
         ) : IOrderQueryProvider
 {
     public async Task<List<OrderDto>> GetOrdersAsync()
     {
-        var products = await backofficeService.GetProductsAsync();
-
         var result = await techFoodContext.Orders
             .AsNoTracking()
             .Include(order => order.Items)
@@ -36,20 +32,15 @@ internal class OrderQueryProvider(
                 data.Status,
                 [.. data.Items.Select(item =>
                 {
-                    var product = products.FirstOrDefault(p => p.Id == item.ProductId);
-
                     return new OrderItemDto(
                         item.Id,
-                        product!.Name,
-                        product.ImageUrl,
+                        item.ProductId,
                         item.UnitPrice, item.Quantity);
                 })]))];
     }
 
     public async Task<List<OrderDto>> GetReadyOrdersAsync()
     {
-        var products = await backofficeService.GetProductsAsync();
-
         var result = await techFoodContext.Orders
             .AsNoTracking()
             .Include(order => order.Items)
@@ -67,12 +58,9 @@ internal class OrderQueryProvider(
                  data.Status,
                  [.. data.Items.Select(item =>
                  {
-                     var product = products.FirstOrDefault(p => p.Id == item.ProductId);
-
                      return new OrderItemDto(
                          item.Id,
-                         product!.Name,
-                         product.ImageUrl,
+                         item.ProductId,
                          item.UnitPrice, item.Quantity);
                  })]))];
     }
@@ -98,8 +86,7 @@ internal class OrderQueryProvider(
                  {
                      return new OrderItemDto(
                          item.Id,
-                         null!,
-                         null!,
+                         item.ProductId,
                          item.UnitPrice, item.Quantity);
                  })]);
     }
