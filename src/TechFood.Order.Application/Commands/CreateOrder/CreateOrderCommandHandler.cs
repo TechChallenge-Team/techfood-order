@@ -3,8 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TechFood.Order.Application.Dto;
-using TechFood.Order.Application.Events;
-using TechFood.Order.Application.Events.Integration.Incoming;
 using TechFood.Order.Application.Events.Integration.Outgoing;
 using TechFood.Order.Application.Services.Interfaces;
 using TechFood.Order.Domain.Entities;
@@ -59,8 +57,7 @@ public class CreateOrderCommandHandler(
             items.ConvertAll(item =>
                 new OrderItemDto(
                     item.orderItem.Id,
-                    item.product.Name,
-                    item.product.ImageUrl,
+                    item.product.Id,
                     item.product.Price,
                     item.orderItem.Quantity
                 )

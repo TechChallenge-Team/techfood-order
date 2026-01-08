@@ -23,14 +23,14 @@ public class GetOrderByIdQueryHandlerTests
         // Arrange
         var orderId = Guid.NewGuid();
         var customerId = Guid.NewGuid();
+        var orderItemId = Guid.NewGuid();
         var productId = Guid.NewGuid();
 
         var orderItems = new List<OrderItemDto>
         {
             new OrderItemDto(
+                orderItemId,
                 productId,
-                "Big Mac",
-                "https://example.com/bigmac.jpg",
                 25.50m,
                 2)
         };
@@ -61,7 +61,6 @@ public class GetOrderByIdQueryHandlerTests
         result.CustomerId.Should().Be(customerId);
         result.Status.Should().Be(OrderStatusType.Received);
         result.Items.Should().HaveCount(1);
-        result.Items[0].Name.Should().Be("Big Mac");
         result.Items[0].Quantity.Should().Be(2);
 
         _queryProviderMock.Verify(x => x.GetOrderByIdAsync(orderId), Times.Once);
@@ -99,8 +98,7 @@ public class GetOrderByIdQueryHandlerTests
         {
             new OrderItemDto(
                 Guid.NewGuid(),
-                "Cheeseburger",
-                null,
+                Guid.NewGuid(),
                 15.00m,
                 1)
         };
@@ -139,9 +137,9 @@ public class GetOrderByIdQueryHandlerTests
 
         var orderItems = new List<OrderItemDto>
         {
-            new OrderItemDto(Guid.NewGuid(), "Big Mac", "img1.jpg", 25.50m, 2),
-            new OrderItemDto(Guid.NewGuid(), "French Fries", "img2.jpg", 10.00m, 3),
-            new OrderItemDto(Guid.NewGuid(), "Coca-Cola", null, 8.00m, 2)
+            new OrderItemDto(Guid.NewGuid(), Guid.NewGuid(), 25.50m, 2),
+            new OrderItemDto(Guid.NewGuid(), Guid.NewGuid(), 10.00m, 3),
+            new OrderItemDto(Guid.NewGuid(), Guid.NewGuid(), 8.00m, 2)
         };
 
         var expectedOrder = new OrderDto(
@@ -165,9 +163,6 @@ public class GetOrderByIdQueryHandlerTests
         // Assert
         result.Should().NotBeNull();
         result!.Items.Should().HaveCount(3);
-        result.Items[0].Name.Should().Be("Big Mac");
-        result.Items[1].Name.Should().Be("French Fries");
-        result.Items[2].Name.Should().Be("Coca-Cola");
         _queryProviderMock.Verify(x => x.GetOrderByIdAsync(orderId), Times.Once);
     }
 

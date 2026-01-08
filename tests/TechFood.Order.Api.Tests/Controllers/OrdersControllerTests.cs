@@ -261,8 +261,7 @@ public class OrdersControllerTests
         {
             new OrderItemDto(
                 Guid.NewGuid(),
-                "Cheeseburger",
-                null,
+                Guid.NewGuid(),
                 15.00m,
                 1)
         };

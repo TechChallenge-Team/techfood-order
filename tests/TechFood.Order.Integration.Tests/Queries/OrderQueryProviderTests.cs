@@ -28,7 +28,7 @@ public class OrderQueryProviderTests : IDisposable
 
         _context = new OrderContext(infraOptions, options);
         _backofficeServiceMock = new Mock<IBackofficeService>();
-        _queryProvider = new OrderQueryProvider(_backofficeServiceMock.Object, _context);
+        _queryProvider = new OrderQueryProvider(_context);
         _faker = new Faker();
     }
 
@@ -69,14 +69,11 @@ public class OrderQueryProviderTests : IDisposable
         var firstOrder = result.First();
         firstOrder.Number.Should().Be(1);
         firstOrder.Items.Should().HaveCount(1);
-        firstOrder.Items.First().Name.Should().Be("Product 1");
-        firstOrder.Items.First().ImageUrl.Should().Be("image1.jpg");
         firstOrder.Items.First().Quantity.Should().Be(2);
 
         var secondOrder = result.Last();
         secondOrder.Number.Should().Be(2);
         secondOrder.Items.Should().HaveCount(1);
-        secondOrder.Items.First().Name.Should().Be("Product 2");
     }
 
     [Fact(DisplayName = "Should return orders ordered by creation date")]
@@ -260,8 +257,6 @@ public class OrderQueryProviderTests : IDisposable
         var orderDto = result.Single();
         var itemDto = orderDto.Items.Single();
 
-        itemDto.Name.Should().Be(expectedProductName);
-        itemDto.ImageUrl.Should().Be(expectedImageUrl);
         itemDto.Price.Should().Be(expectedPrice);
         itemDto.Quantity.Should().Be(3);
     }
@@ -300,7 +295,6 @@ public class OrderQueryProviderTests : IDisposable
         // Assert
         var orderDto = result.Single();
         orderDto.Items.Should().HaveCount(3);
-        orderDto.Items.Select(i => i.Name).Should().Contain(new[] { "Product 1", "Product 2", "Product 3" });
     }
 
     [Fact(DisplayName = "Should return order by Id when it exists")]
