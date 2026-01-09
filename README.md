@@ -331,8 +331,8 @@ O banco será hospedado no **AWS RDS SQLServer** pelos seguintes motivos:
 ## 🧪 Testes Sonar
 
 <img width="1551" height="987" alt="image" src="https://github.com/user-attachments/assets/6cea8af7-8860-48ea-bd3c-5ed9459b9b6b" />
+<img width="1627" height="827" alt="image" src="https://github.com/user-attachments/assets/686a67f7-4567-4e44-8ee4-85b33fb51fa0" />
 
-<img width="1782" height="969" alt="image" src="https://github.com/user-attachments/assets/c167a45e-ec6f-4239-8f6f-92a8cda36e34" />
 
 --- 
 ## Members
